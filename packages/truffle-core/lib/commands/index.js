@@ -19,5 +19,5 @@ module.exports = {
   unbox: require("./unbox"),
   version: require("./version"),
   config: require("./config"),
-  watch: require("./watch"),
+  watch: require("./watch")
 };

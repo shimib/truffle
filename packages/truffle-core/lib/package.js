@@ -82,6 +82,17 @@ var Package = {
     }
   },
 
+  publishToArti: function(options, callback) {
+    var self = this;
+    var host = options.ethpm.ipfs_host;
+    //console.log("ipfs host: " + host);
+    if ((host instanceof EthPM.hosts.IPFS) == false) {
+      host = new EthPM.hosts.IPFS(host, options.ethpm.ipfs_port, options.ethpm.ipfs_protocol);
+      console.log("port: " + options.ethpm.ipfs_port);
+        console.log("protocol: " + options.ethpm.ipfs_protocol);
+    }
+    options.logger.log("Finding publishable artifacts...");
+  },
   publish: function(options, callback) {
     var self = this;
 
