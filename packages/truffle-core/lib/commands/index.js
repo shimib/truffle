@@ -10,6 +10,7 @@ module.exports = {
   help: require("./help"),
   init: require("./init"),
   install: require("./install"),
+  store: require("./store"),
   migrate: require("./migrate"),
   networks: require("./networks"),
   opcode: require("./opcode"),
