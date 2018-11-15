@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const truffleMycmd = require('..');
+const truffleMycmd = require("..");
 
-describe('truffle-mycmd', () => {
-    it('needs tests');
+describe("truffle-mycmd", () => {
+  it("needs tests");
 });

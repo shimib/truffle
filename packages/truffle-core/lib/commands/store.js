@@ -7,7 +7,7 @@ const command = {
     options: []
   },
   run: function(options, done) {
-//    const mycmd = require("truffle-mycmd");
+    //    const mycmd = require("truffle-mycmd");
     var Config = require("truffle-config");
     var Package = require("../package");
 
