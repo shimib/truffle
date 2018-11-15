@@ -11,8 +11,13 @@ const command = {
     var Config = require("truffle-config");
     var Package = require("../package");
 
+if (options._ && options._.length > 0) {
+      options.packages = options._;
+    }
+
     var config = Config.detect(options);
-    Package.publishToArti(config, done);
+    Package.installFromArti(config, done);
+      
     // TODO: write the run command here, something like:
     // mycmd(options, done)
     console.log("lllloaoood")

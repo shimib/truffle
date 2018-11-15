@@ -3,6 +3,7 @@ var TruffleError = require("truffle-error");
 var Networks = require("./networks");
 var EthPM = require("ethpm");
 var EthPMRegistry = require("ethpm-registry");
+var ArtifactoryRegistry = require("ethpm/lib/registries/artifactoryregistry");
 var Web3 = require("web3");
 var async = require("async");
 var path = require("path");
@@ -10,6 +11,56 @@ var fs = require("fs");
 var OS = require("os");
 
 var Package = {
+  installFromArti: async function(options, callback) {
+    var host = options.ethpm.ipfs_host;
+    if (host instanceof EthPM.hosts.IPFS == false) {
+      host = new EthPM.hosts.IPFS(
+        options.ethpm.ipfs_host,
+        options.ethpm.ipfs_port,
+        options.ethpm.ipfs_protocol
+      );
+    }
+    var pkg = new EthPM(options.working_directory, host, new ArtifactoryRegistry(options.artifactory.url) );
+    if (options.packages) {
+      var promises = options.packages.map(function(package_name) {
+        var pieces = package_name.split("@");
+        package_name = pieces[0];
+
+        var version = "*";
+
+        if (pieces.length > 1) {
+          version = pieces[1];
+        }
+        return pkg.installDependency(package_name, version);
+      });
+
+      Promise.all(promises)
+        .then(function() {
+          callback();
+        })
+        .catch(callback);
+    } else {
+      fs.access(
+        path.join(options.working_directory, "ethpm.json"),
+        fs.constants.R_OK,
+        function(err) {
+          var manifest;
+
+          // If the ethpm.json file doesn't exist, use the config as the manifest.
+          if (err) {
+            manifest = options;
+          }
+console.log("in Package.js before pkg.install(manifest)");
+          pkg
+            .install(manifest)
+            .then(function() {
+              callback();
+            })
+            .catch(callback);
+        }
+      );
+    }
+  },
   install: async function(options, callback) {
     expect.options(options, ["working_directory", "ethpm"]);
 
