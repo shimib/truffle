@@ -107,48 +107,38 @@ var Package = {
     }
     options.logger.log("Finding publishable artifacts...");
 
-
     self.publishable_artifacts(options, function(err, artifacts) {
-
       if (err) return callback(err);
 
-          var pkg = new EthPM(options.working_directory, host);
+      var pkg = new EthPM(options.working_directory, host);
 
-          fs.access(
-            path.join(options.working_directory, "ethpm.json"),
-            fs.constants.R_OK,
-            function(err) {
-              var manifest;
+      fs.access(
+        path.join(options.working_directory, "ethpm.json"),
+        fs.constants.R_OK,
+        function(err) {
+          var manifest;
 
-              // If the ethpm.json file doesn't exist, use the config as the manifest.
-              if (err) {
-                manifest = options;
-              }
+          // If the ethpm.json file doesn't exist, use the config as the manifest.
+          if (err) {
+            manifest = options;
+          }
 
+          options.logger.log("Uploading sources and publishing to registry...");
+
+          // TODO: Gather contract_types and deployments
+          pkg
+            .publish(artifacts.contract_types, artifacts.deployments, manifest)
+            .then(function(lockfile) {
+              // If we get here, publishing was a success.
               options.logger.log(
-                "Uploading sources and publishing to registry..."
+                "+ " + lockfile.package_name + "@" + lockfile.version
               );
-
-              // TODO: Gather contract_types and deployments
-              pkg
-                .publish(
-                  artifacts.contract_types,
-                  artifacts.deployments,
-                  manifest
-                )
-                .then(function(lockfile) {
-                  // If we get here, publishing was a success.
-                  options.logger.log(
-                    "+ " + lockfile.package_name + "@" + lockfile.version
-                  );
-                  callback();
-                })
-                .catch(callback);
-            }
-          );
-  });
-
-
+              callback();
+            })
+            .catch(callback);
+        }
+      );
+    });
   },
   publish: function(options, callback) {
     var self = this;

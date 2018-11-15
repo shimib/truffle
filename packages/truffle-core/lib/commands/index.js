@@ -11,6 +11,7 @@ module.exports = {
   init: require("./init"),
   install: require("./install"),
   store: require("./store"),
+  load: require("./load"),
   migrate: require("./migrate"),
   networks: require("./networks"),
   opcode: require("./opcode"),
