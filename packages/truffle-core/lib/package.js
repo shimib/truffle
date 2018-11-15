@@ -20,7 +20,7 @@ var Package = {
         options.ethpm.ipfs_protocol
       );
     }
-    var pkg = new EthPM(options.working_directory, host, new ArtifactoryRegistry(options.artifactory.url) );
+      var pkg = new EthPM(options.working_directory, host, new ArtifactoryRegistry(options.artifactory.host, options.artifactory.port, options.artifactory.register_url, options.artifactory.getURI_url)) ;
     if (options.packages) {
       var promises = options.packages.map(function(package_name) {
         var pieces = package_name.split("@");
@@ -161,7 +161,7 @@ console.log("in Package.js before pkg.install(manifest)");
     self.publishable_artifacts(options, function(err, artifacts) {
       if (err) return callback(err);
 
-      var pkg = new EthPM(options.working_directory, host, new ArtifactoryRegistry(options.artifactory.url)) ;
+      var pkg = new EthPM(options.working_directory, host, new ArtifactoryRegistry(options.artifactory.host, options.artifactory.port, options.artifactory.register_url, options.artifactory.getURI_url)) ;
 
       fs.access(
         path.join(options.working_directory, "ethpm.json"),
