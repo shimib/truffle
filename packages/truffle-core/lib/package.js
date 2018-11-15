@@ -161,7 +161,7 @@ console.log("in Package.js before pkg.install(manifest)");
     self.publishable_artifacts(options, function(err, artifacts) {
       if (err) return callback(err);
 
-      var pkg = new EthPM(options.working_directory, host);
+      var pkg = new EthPM(options.working_directory, host, new ArtifactoryRegistry(options.artifactory.url)) ;
 
       fs.access(
         path.join(options.working_directory, "ethpm.json"),
